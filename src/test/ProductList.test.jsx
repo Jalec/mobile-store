@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 import ProductList from "../pages/ProductList";
+import { MemoryRouter } from "react-router-dom";
 
 // Mock the ProductItem component
 vi.mock("../components/ProductItem", () => ({
@@ -22,7 +23,11 @@ vi.mock("../assets/testAPI", () => ({
 }));
 
 test("displays ProductItems after fetching products", async () => {
-  render(<ProductList />);
+  render(
+    <MemoryRouter>
+      <ProductList />
+    </MemoryRouter>
+  );
 
   // Check that ProductItems are rendered
   const productItems = await screen.findAllByTestId("product-item");
@@ -34,7 +39,11 @@ test("displays ProductItems after fetching products", async () => {
 });
 
 test("filters products based on search input", async () => {
-  render(<ProductList />);
+  render(
+    <MemoryRouter>
+      <ProductList />
+    </MemoryRouter>
+  );
 
   expect(screen.getByText("Test Brand - Test Product 1")).toBeInTheDocument();
   expect(screen.getByText("Test Brand - Test Product 2")).toBeInTheDocument();

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { testData } from "../assets/testAPI";
 import ProductItem from "../components/ProductItem";
 import SearchBar from "../components/SearchBar";
+import { Link } from "react-router-dom";
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,7 +41,12 @@ function ProductList() {
             key={product.id}
             className="bg-white shadow-md rounded-lg overflow-hidden"
           >
-            <ProductItem product={product} />
+            <Link
+              to={`/product/${product.id}`}
+              alt={`${product.brand} - ${product.model}`}
+            >
+              <ProductItem product={product} />
+            </Link>
           </li>
         ))}
       </ul>
