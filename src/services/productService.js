@@ -17,3 +17,14 @@ export const fetchProductDetail = async (productId) => {
   }
   return response.json();
 };
+
+export const handleAddToCart = async (itemInfo) => {
+  const response = await fetch(`${API_URL}/api/cart`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(itemInfo),
+  });
+  return response.json();
+};

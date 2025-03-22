@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchProductDetail } from "../services/productService";
+import {
+  fetchProductDetail,
+  handleAddToCart,
+} from "../services/productService";
 import Selector from "../components/Selector";
 import ProductDescription from "../components/ProductDescription";
+import useCartStore from "../stores/cartStore";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -10,18 +14,35 @@ function ProductDetail() {
   const [selectedStorage, setSelectedStorage] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
 
+  // We import the cart global state
+  const { addToCart } = useCartStore();
+
   useEffect(() => {
     const getProductDetails = async () => {
       try {
         const data = await fetchProductDetail(id);
-        console.log(data);
         setProductDetails(data);
+        setSelectedStorage(data.options.storages[0].code);
+        setSelectedColor(data.options.colors[0].code);
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
     };
     getProductDetails();
   }, [id]);
+
+  const handleAddCart = async () => {
+    if (!productDetails) return;
+
+    const itemInfo = {
+      id: productDetails.id,
+      colorCode: parseInt(selectedColor),
+      storageCode: parseInt(selectedStorage),
+    };
+
+    await handleAddToCart(itemInfo);
+    addToCart(itemInfo);
+  };
 
   if (!productDetails) {
     return <div>Loading...</div>;
@@ -58,18 +79,24 @@ function ProductDetail() {
             <h2 className="text-xl font-semibold mb-4">Opciones:</h2>
             <div className="flex flex-col gap-4 mb-4">
               <Selector
-                options={productDetails?.internalMemory}
+                options={productDetails?.options?.storages}
                 selectedValue={selectedStorage}
                 setSelectedValue={setSelectedStorage}
                 title={"Almacenamiento:"}
               />
               <Selector
-                options={productDetails?.colors}
+                options={productDetails?.options?.colors}
                 selectedValue={selectedColor}
                 setSelectedValue={setSelectedColor}
                 title={"Color:"}
               />
             </div>
+            <button
+              onClick={handleAddCart}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Comprar
+            </button>
           </section>
         </div>
       </div>

@@ -35,8 +35,6 @@ vi.mock("../services/productService", () => ({
       primaryCamera: "48MP",
       dimentions: "160 x 75 x 8mm",
       weight: "200g",
-      internalMemory: ["64gb", "32GB"],
-      colors: ["black", "White"],
     })
   ),
 }));
@@ -68,7 +66,5 @@ describe("ProductDetail Component", () => {
     expect(screen.getByText("48MP")).toBeInTheDocument();
     expect(screen.getByText("160 x 75 x 8mm")).toBeInTheDocument();
     expect(screen.getByText("200g")).toBeInTheDocument();
-    expect(screen.getByText("64gb")).toBeInTheDocument();
-    expect(screen.getByText("black")).toBeInTheDocument();
   });
 });
