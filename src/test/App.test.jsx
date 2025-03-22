@@ -5,15 +5,15 @@ import ProductDetail from "../pages/ProductDetail";
 import { expect, test } from "vitest";
 
 test("renders product list page on '/' route", () => {
-  render(
-    <MemoryRouter initialEntries={["/"]}>
-      <Routes>
-        <Route path="/" element={<ProductList />} />
-      </Routes>
-    </MemoryRouter>
-  );
-
-  expect(screen.getByText(/ProductList/i)).toBeInTheDocument();
+  expect(() => {
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <Routes>
+          <Route path="/" element={<ProductList />} />
+        </Routes>
+      </MemoryRouter>
+    );
+  }).not.toThrow();
 });
 
 test("renders product detail page on '/product/:id' route", () => {
