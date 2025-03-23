@@ -3,10 +3,7 @@ import React from "react";
 function ProductDescription({ productDetails }) {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
-        <p>
-          <strong>Precio:</strong> ${productDetails.price}
-        </p>
+      <div className="h-1/4">
         <p>
           <strong>CPU:</strong> {productDetails.cpu}
         </p>

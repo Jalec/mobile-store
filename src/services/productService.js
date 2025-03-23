@@ -1,12 +1,33 @@
 const API_URL = "https://itx-frontend-test.onrender.com";
+const CACHE_KEY = "cachedProducts";
+const CACHE_EXPIRATION = 60 * 60 * 1000; // 1 hour of expiration
 
 // fetchProducts: retrieves the list of products
 export const fetchProducts = async () => {
+  const cachedData = localStorage.getItem(CACHE_KEY);
+
+  if (cachedData) {
+    const { data, timestamp } = JSON.parse(cachedData);
+
+    if (Date.now() - timestamp < CACHE_EXPIRATION) {
+      console.log("Using cached data");
+      return data;
+    }
+  }
+
+  console.log("Fetching new data from API...");
   const response = await fetch(`${API_URL}/api/product`);
   if (!response) {
     throw new Error("Failed to fetch products");
   }
-  return response.json();
+  const products = await response.json();
+
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({ data: products, timestamp: Date.now() })
+  );
+
+  return products;
 };
 
 // fetchProductDetail: retrieves details of a single product

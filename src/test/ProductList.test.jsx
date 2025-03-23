@@ -3,23 +3,21 @@ import { expect, test, vi } from "vitest";
 import ProductList from "../pages/ProductList";
 import { MemoryRouter } from "react-router-dom";
 
-// Mock the ProductItem component
+vi.mock("../services/productService", () => ({
+  fetchProducts: vi.fn(() =>
+    Promise.resolve([
+      { id: 1, model: "Test Product 1", brand: "Test Brand" },
+      { id: 2, model: "Test Product 2", brand: "Test Brand" },
+    ])
+  ),
+}));
+
 vi.mock("../components/ProductItem", () => ({
   default: ({ product }) => (
     <div data-testid="product-item">
       {product.brand} - {product.model}
     </div>
   ),
-}));
-
-// Mock the testData
-vi.mock("../assets/testAPI", () => ({
-  testData: {
-    products: [
-      { id: 1, model: "Test Product 1", brand: "Test Brand" },
-      { id: 2, model: "Test Product 2", brand: "Test Brand" },
-    ],
-  },
 }));
 
 test("displays ProductItems after fetching products", async () => {
@@ -29,7 +27,6 @@ test("displays ProductItems after fetching products", async () => {
     </MemoryRouter>
   );
 
-  // Check that ProductItems are rendered
   const productItems = await screen.findAllByTestId("product-item");
   expect(productItems).toHaveLength(2);
 
@@ -45,15 +42,18 @@ test("filters products based on search input", async () => {
     </MemoryRouter>
   );
 
+  await screen.findAllByTestId("product-item");
+
+  // Verify initial products
   expect(screen.getByText("Test Brand - Test Product 1")).toBeInTheDocument();
   expect(screen.getByText("Test Brand - Test Product 2")).toBeInTheDocument();
 
-  // Simulate search
+  // We simulate our search
   fireEvent.change(screen.getByPlaceholderText(/buscar/i), {
     target: { value: "1" },
   });
 
-  // Show only test product 1
+  // Verify filtered products
   expect(screen.getByText("Test Brand - Test Product 1")).toBeInTheDocument();
   expect(
     screen.queryByText("Test Brand - Test Product 2")

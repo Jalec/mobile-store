@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-//import { fetchProducts } from "../services/productService";
-import { testData } from "../assets/testAPI";
+import { fetchProducts } from "../services/productService";
+//import { testData } from "../assets/testAPI";
 import ProductItem from "../components/ProductItem";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
@@ -12,9 +12,9 @@ function ProductList() {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        //const data = await fetchProducts(); temporally commented to not make too many requests to the API while development
-        setProducts(testData.products);
-        setFilteredProducts(testData.products);
+        const data = await fetchProducts();
+        setProducts(data);
+        setFilteredProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }

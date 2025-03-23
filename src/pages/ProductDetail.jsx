@@ -49,56 +49,74 @@ function ProductDetail() {
   }
 
   return (
-    <div className="p-7">
-      <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-        {/* Product Image */}
-        <div className="flex justify-center w-full md:w-1/4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <img
-            src={productDetails.imgUrl}
-            alt={`${productDetails.brand} - ${productDetails.model}`}
-            className="w-64 h-auto rounded-lg shadow-md"
-          />
-        </div>
-
-        {/* Product Details */}
-        <div className="w-full md:w-1/4 rounded-lg ">
-          <h1 className="text-3xl font-bold mb-4">
-            {productDetails.brand} - {productDetails.model}
-          </h1>
-
-          {/* Description Section */}
-          <section className="mb-8">
-            <h2 className="text-l font-semibold mb-4">
-              Descripción del producto:
-            </h2>
-            <ProductDescription productDetails={productDetails} />
-          </section>
-
-          {/* Actions Section */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Opciones:</h2>
-            <div className="flex flex-col gap-4 mb-4">
-              <Selector
-                options={productDetails?.options?.storages}
-                selectedValue={selectedStorage}
-                setSelectedValue={setSelectedStorage}
-                title={"Almacenamiento:"}
-              />
-              <Selector
-                options={productDetails?.options?.colors}
-                selectedValue={selectedColor}
-                setSelectedValue={setSelectedColor}
-                title={"Color:"}
+    <div className="min-h-screen flex items-center justify-center p-8 bg-gray-50">
+      <div className="max-w-6xl w-full bg-white rounded-lg shadow-lg p-8">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Product Image */}
+          <div className="w-full md:w-1/2 flex justify-center items-center">
+            <div className="w-full h-96 rounded-lg shadow-md overflow-hidden">
+              <img
+                src={productDetails.imgUrl}
+                alt={`${productDetails.brand} - ${productDetails.model}`}
+                className="w-full h-full object-contain"
               />
             </div>
-            <button
-              onClick={handleAddCart}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Comprar
-            </button>
-          </section>
+          </div>
+
+          {/* Product Details */}
+          <div className="w-full md:w-1/2">
+            {/* Product Title */}
+            <h1 className="text-3xl font-bold mb-6">
+              {productDetails.brand} - {productDetails.model}
+            </h1>
+
+            {/* Price */}
+            <h2 className="text-2xl mb-6">
+              Precio: <strong>${productDetails.price}</strong>
+            </h2>
+
+            {/* Actions Section */}
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">Opciones:</h2>
+
+              {/* Storage Selector */}
+              <div className="mb-6">
+                <Selector
+                  options={productDetails?.options?.storages}
+                  selectedValue={selectedStorage}
+                  setSelectedValue={setSelectedStorage}
+                  title="Almacenamiento:"
+                />
+              </div>
+
+              {/* Color Selector */}
+              <div className="mb-6">
+                <Selector
+                  options={productDetails?.options?.colors}
+                  selectedValue={selectedColor}
+                  setSelectedValue={setSelectedColor}
+                  title="Color:"
+                />
+              </div>
+
+              {/* Add to Cart Button */}
+              <button
+                onClick={handleAddCart}
+                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-semibold cursor-pointer"
+              >
+                Añadir al carrito
+              </button>
+            </section>
+          </div>
         </div>
+
+        {/* Description Section */}
+        <section className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">
+            Descripción del producto:
+          </h2>
+          <ProductDescription productDetails={productDetails} />
+        </section>
       </div>
     </div>
   );

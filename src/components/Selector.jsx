@@ -11,7 +11,7 @@ function Selector({ options, selectedValue, setSelectedValue, title }) {
         <select
           value={selectedValue}
           onChange={(e) => handleChangeOption(e)}
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-2 border border-gray-300 rounded-lg cursor-pointer"
         >
           {options?.map((option) => (
             <option key={option.code} value={option.code}>
