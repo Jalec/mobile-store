@@ -3,6 +3,24 @@ import { expect, test, vi } from "vitest";
 import ProductList from "../pages/ProductList";
 import { MemoryRouter } from "react-router-dom";
 
+class IntersectionObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+
+Object.defineProperty(window, "IntersectionObserver", {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
+
+Object.defineProperty(global, "IntersectionObserver", {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
+
 vi.mock("../services/productService", () => ({
   fetchProducts: vi.fn(() =>
     Promise.resolve([
@@ -42,13 +60,14 @@ test("filters products based on search input", async () => {
     </MemoryRouter>
   );
 
+  // Wait for the products to be displayed
   await screen.findAllByTestId("product-item");
 
   // Verify initial products
   expect(screen.getByText("Test Brand - Test Product 1")).toBeInTheDocument();
   expect(screen.getByText("Test Brand - Test Product 2")).toBeInTheDocument();
 
-  // We simulate our search
+  // Simulate search
   fireEvent.change(screen.getByPlaceholderText(/buscar/i), {
     target: { value: "1" },
   });
