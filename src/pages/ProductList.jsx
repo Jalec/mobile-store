@@ -3,6 +3,7 @@ import { fetchProducts } from "../services/productService";
 import ProductItem from "../components/ProductItem";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 
 function ProductList() {
   const [allProducts, setAllProducts] = useState([]);
@@ -57,40 +58,47 @@ function ProductList() {
   return (
     <main className="flex flex-col gap-4 p-7">
       <SearchBar setSearchQuery={setSearchQuery} />
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-        {displayedProducts.map((product, index) => {
-          if (displayedProducts.length === index + 1) {
-            return (
-              <li
-                key={product.id}
-                ref={lastProductRef}
-                className="bg-white shadow-md rounded-lg overflow-hidden"
-              >
-                <Link
-                  to={`/product/${product.id}`}
-                  alt={`${product.brand} - ${product.model}`}
+      {displayedProducts.length === 0 ? (
+        <div className="flex justify-center mb-12">
+          <ClimbingBoxLoader size={32} />
+        </div>
+      ) : (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+          {displayedProducts.map((product, index) => {
+            if (displayedProducts.length === index + 1) {
+              return (
+                <li
+                  key={product.id}
+                  ref={lastProductRef}
+                  className="bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden"
                 >
-                  <ProductItem product={product} />
-                </Link>
-              </li>
-            );
-          } else {
-            return (
-              <li
-                key={product.id}
-                className="bg-white shadow-md rounded-lg overflow-hidden"
-              >
-                <Link
-                  to={`/product/${product.id}`}
-                  alt={`${product.brand} - ${product.model}`}
+                  <Link
+                    to={`/product/${product.id}`}
+                    alt={`${product.brand} - ${product.model}`}
+                  >
+                    <ProductItem product={product} />
+                  </Link>
+                </li>
+              );
+            } else {
+              return (
+                <li
+                  key={product.id}
+                  className="bg-white border border-gray-300 shadow-md rounded-lg overflow-hidden"
                 >
-                  <ProductItem product={product} />
-                </Link>
-              </li>
-            );
-          }
-        })}
-      </ul>
+                  <Link
+                    to={`/product/${product.id}`}
+                    alt={`${product.brand} - ${product.model}`}
+                  >
+                    <ProductItem product={product} />
+                  </Link>
+                </li>
+              );
+            }
+          })}
+        </ul>
+      )}
+
       {!hasMore && (
         <p className="text-center text-gray-500">No more products to load.</p>
       )}
